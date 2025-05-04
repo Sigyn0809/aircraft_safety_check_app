@@ -1,16 +1,35 @@
-# flight_safty_1
+# Aircraft Safety Check App
 
-A new Flutter project.
+**캡스톤 디자인 프로젝트 (광운대학교 전기공학과 4학년)**  
+**프로젝트명**: Aircraft Safety Check - 비행기 안전 상태 조회 앱 개발  
+**학번**: 2018732026 김준호
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 프로젝트 개요
 
-A few resources to get you started if this is your first Flutter project:
+이 Flutter 애플리케이션은 사용자가 비행기 번호를 입력하여 해당 항공기의 센서 데이터를 조회하고, Firebase와 연결된 머신러닝 모델을 통해 이상 여부를 판단하는 시스템입니다.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 사용 기술
+
+| 영역        | 기술 스택 |
+|-------------|-----------|
+| 프론트엔드  | Flutter (Dart) |
+| 백엔드      | Firebase Firestore |
+| 머신러닝    | TensorFlow + TFLite |
+| 실험 & 학습 | Google Colab |
+
+---
+
+## 기능 요약
+
+- **일반 사용자**: 비행기 번호로 센서 데이터를 조회하고, 이상 여부를 실시간으로 확인  
+- **관리자 기능**: Firestore에 센서 데이터 입력 및 수정  
+- **이상 감지**: 사전 학습된 TFLite 모델을 활용한 이진 분류 (정상 / 이상)
+
+---
+
+## 프로젝트 구조 (일부)
+
