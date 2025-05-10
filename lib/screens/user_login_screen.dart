@@ -32,7 +32,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류 발생: $e')),
+        SnackBar(content: Text('존재하지 않는 Flight Number입니다. 다시 입력해 주세요.')),
       );
     } finally {
       setState(() => _isLoading = false);

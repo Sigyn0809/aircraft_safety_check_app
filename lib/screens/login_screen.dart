@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'admin_login_screen.dart'; // AdminLoginScreen을 import
 import 'user_login_screen.dart'; // UserLoginScreen을 import
-import 'admin_safety_check_page.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
