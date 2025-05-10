@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'admin_safety_check_page.dart';
+import 'flight_edit_screen.dart';
 
 class AdminLoginScreen extends StatelessWidget {
   @override
@@ -135,7 +135,7 @@ class AdminLoginScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AdminSafetyCheckPage()),
+                        builder: (context) => FlightEditScreen()),
                   );
                 },
                 child: Container(
