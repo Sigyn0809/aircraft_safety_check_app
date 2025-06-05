@@ -1,16 +1,10 @@
-# flight_safty_1
+# **주요 기능 업데이트**
+### 1. 이상 감지 및 추천 항공편 기능
+- 사용자 입력 항공편 번호에 대해 센서 데이터를 기반으로 이상 여부를 판별합니다.
+- 이상이 감지된 경우, 같은 노선의 다른 정상 항공편을 찾아 추천해줍니다.
+- 성능 향상을 위해 추천 항공편은 DynamoDB 캐시 테이블(FlightRecommendationCache)에 저장되어, 이후 조회 시 재추론 없이 응답됩니다.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 2. 관리자 인증 기능 (AWS Cognito 연동)
+- 관리자 전용 기능(항공편 등록, 수정, 조회)은 AWS Cognito 인증 기반 로그인 후 사용 가능하도록 구현되어 있습니다.
+- 로그인 시 발급받은 토큰을 API 호출 시 포함하여 인증을 수행합니다.
+- /admin 경로로 시작하는 API만 인증이 요구되며, 사용자 API는 인증 없이 접근 가능합니다.
