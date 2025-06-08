@@ -13,42 +13,54 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
 
   void _handleClick() async {
     final flightNumber = _controller.text.trim();
-
     if (flightNumber.isEmpty) return;
 
     setState(() => _isLoading = true);
 
     try {
       final response = await ApiService.checkAnomaly(flightNumber);
+
+      if (response == null || !response.containsKey("anomaly")) {
+        throw Exception("INVALID_RESPONSE");
+      }
+
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ResultScreen(
-                flightNumber: flightNumber,
-                data: response,
-              ),
+              ResultScreen(flightNumber: flightNumber, data: response),
         ),
       );
     } catch (e) {
+      final errorMessage = e.toString().contains("NOT_FOUND")
+          ? "존재하지 않는 Flight Number입니다. 다시 입력해 주세요."
+          : "오류가 발생했습니다. 잠시 후 다시 시도해 주세요.";
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('존재하지 않는 Flight Number입니다. 다시 입력해 주세요.')),
+        SnackBar(
+          backgroundColor: Color(0xFFB3E5FC),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          content: Center(
+            heightFactor: 1,
+            child: Text(
+              errorMessage,
+              style: TextStyle(color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
       );
     } finally {
       setState(() => _isLoading = false);
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width; // 화면의 너비
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height; // 화면의 높이
+    double screenWidth = MediaQuery.of(context).size.width; // 화면의 너비
+    double screenHeight = MediaQuery.of(context).size.height; // 화면의 높이
 
     return Scaffold(
       backgroundColor: Color(0xFFD7EFFF), // 하늘색 배경
@@ -66,7 +78,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
         centerTitle: true,
         // 중앙 정렬
         title: Text(
-          'Aircraft Safety Check', // 제목
+          'User Login', // 제목
           style: TextStyle(
             color: Colors.black, // 검정색 텍스트
             fontSize: 20,
@@ -75,14 +87,8 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
         ),
       ),
       body: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
+        width: screenWidth,
+        height: screenHeight,
         child: Stack(
           children: [
             // 'Aircraft Safety Check' 텍스트
@@ -106,10 +112,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
             // Flight Number 텍스트와 필드
             Positioned(
               top: screenHeight * 0.34, // Flight Number 필드 상단 위치
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.5 - screenWidth * 0.67 / 2, // 수평 중앙 정렬
+              left: screenWidth * 0.5 - screenWidth * 0.67 / 2, // 수평 중앙 정렬
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -143,7 +146,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
               ),
             ),
 
-            // 클릭 버튼
+            // 검색 버튼
             Positioned(
               top: screenHeight * 0.75,
               left: screenWidth * 0.5 - 150 / 2,
@@ -179,7 +182,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                         ),
                       )
                           : Text(
-                        'CLICK',
+                        'Search',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
