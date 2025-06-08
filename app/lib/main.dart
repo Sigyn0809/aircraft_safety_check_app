@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart'; // 로그인 화면을 import
+import 'screens/login_screen.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'amplifyconfiguration.dart';
 
-void main() {
+Future<void> _configureAmplify() async {
+  final auth = AmplifyAuthCognito();
+  try {
+    await Amplify.addPlugin(auth);
+    await Amplify.configure(amplifyconfig);
+    debugPrint('✅ Amplify configured successfully');
+  } catch (e) {
+    debugPrint('⚠️ Amplify configuration failed: $e');
+  }
+}
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // flutter 엔진 초기화
+  await _configureAmplify();
+
+  // 앱 시작 시 강제 로그아웃
+  try {
+    await Amplify.Auth.signOut();
+    print("✅ 앱 시작 시 강제 로그아웃");
+  } catch (e) {
+    print("❌ 로그아웃 실패: $e");
+  }
+
   runApp(FlutterApp()); // 앱 실행
 }
 
