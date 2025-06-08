@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.5
+  amplify_flutter: ^1.7.1
+  amplify_auth_cognito: ^1.7.1
+  amplify_core: ^1.7.1
 
 
 
@@ -55,6 +58,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/images/login_bg.png
 
 
   # The following line ensures that the Material Icons font is
