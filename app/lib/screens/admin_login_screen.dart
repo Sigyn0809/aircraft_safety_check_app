@@ -1,49 +1,87 @@
 import 'package:flutter/material.dart';
 import 'flight_edit_screen.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 
-class AdminLoginScreen extends StatelessWidget {
+class AdminLoginScreen extends StatefulWidget {
+  @override
+  _AdminLoginScreenState createState() => _AdminLoginScreenState();
+}
+
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _signIn() async {
+    final id = _usernameController.text.trim();
+    final pw = _passwordController.text.trim();
+
+    print("🔑 로그인 시도: username=$id, password=$pw");
+
+    try {
+      final result = await Amplify.Auth.signIn(
+        username: id,
+        password: pw,
+      );
+
+      print("📡 로그인 결과: ${result.isSignedIn}");
+
+      if (result.isSignedIn) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FlightEditScreen()),
+        );
+      } else {
+        _showError('로그인에 실패했습니다.');
+      }
+    } on AuthException catch (e) {
+      print("❌ 로그인 에러: ${e.message}");
+      _showError(e.message);
+    }
+  }
+
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;  // 화면의 너비
-    double screenHeight = MediaQuery.of(context).size.height; // 화면의 높이
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFFD7EFFF), // 하늘색 배경
-
-      // 상단 위젯 설정
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // 투명 배경
-        elevation: 0, // 그림자 없애기
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black), // 뒤로가기 아이콘
-          onPressed: () {
-            Navigator.pop(context); // 뒤로가기 버튼 클릭 시 이전 화면으로 돌아가기
-          },
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true, // 중앙 정렬
+        centerTitle: true,
         title: Text(
-          'Aircraft Safety Check', // 제목
+          'Admin Login',
           style: TextStyle(
-            color: Colors.black, // 검정색 텍스트
+            color: Colors.black,
             fontSize: 20,
             fontFamily: 'Inter',
           ),
         ),
       ),
-
-      // 메인 위젯 설정
       body: Container(
-        width: MediaQuery.of(context).size.width, // 화면의 너비
-        height: MediaQuery.of(context).size.height, // 화면의 높이
+        width: screenWidth,
+        height: screenHeight,
         child: Stack(
           children: [
-            // 'Aircraft Safety Check' 텍스트 (ID 필드 바로 위)
             Positioned(
-              top: screenHeight * 0.22, // 세로 위치 지정
-              left: 0, // left를 0으로 설정하여, Align 위젯이 자동으로 중앙 정렬되도록 함
-              right: 0, // right를 0으로 설정하여 Align이 수평 중앙에 배치되도록
+              top: screenHeight * 0.22,
+              left: 0,
+              right: 0,
               child: Align(
-                alignment: Alignment.center, // 수평 중앙 정렬
+                alignment: Alignment.center,
                 child: Text(
                   'Aircraft Safety Check',
                   style: TextStyle(
@@ -54,11 +92,9 @@ class AdminLoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            // ID 텍스트와 필드
             Positioned(
-              top: screenHeight * 0.32, // ID 필드의 상단 위치
-              left: MediaQuery.of(context).size.width * 0.5 - screenWidth * 0.67 / 2, // ID 필드 너비 273을 기준으로 중앙 정렬
+              top: screenHeight * 0.32,
+              left: screenWidth * 0.5 - screenWidth * 0.67 / 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,7 +106,7 @@ class AdminLoginScreen extends StatelessWidget {
                       fontFamily: 'Inter',
                     ),
                   ),
-                  SizedBox(height: 8), // 텍스트와 텍스트 필드 사이의 간격
+                  SizedBox(height: 8),
                   Container(
                     width: screenWidth * 0.67,
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
@@ -80,8 +116,9 @@ class AdminLoginScreen extends StatelessWidget {
                       border: Border.all(color: Color(0xFFD9D9D9)),
                     ),
                     child: TextField(
+                      controller: _usernameController,
                       decoration: InputDecoration(
-                        hintText: 'Enter ID', // 힌트 텍스트 추가
+                        hintText: 'Enter ID',
                         border: InputBorder.none,
                       ),
                     ),
@@ -89,11 +126,9 @@ class AdminLoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Password 텍스트와 필드
             Positioned(
-              top: screenHeight * 0.43, // Password 필드의 상단 위치
-              left: MediaQuery.of(context).size.width * 0.5 - screenWidth * 0.67 / 2, // Password 필드 너비 273을 기준으로 중앙 정렬
+              top: screenHeight * 0.43,
+              left: screenWidth * 0.5 - screenWidth * 0.67 / 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -105,7 +140,7 @@ class AdminLoginScreen extends StatelessWidget {
                       fontFamily: 'Inter',
                     ),
                   ),
-                  SizedBox(height: 8), // 텍스트와 텍스트 필드 사이의 간격
+                  SizedBox(height: 8),
                   Container(
                     width: screenWidth * 0.67,
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
@@ -115,9 +150,10 @@ class AdminLoginScreen extends StatelessWidget {
                       border: Border.all(color: Color(0xFFD9D9D9)),
                     ),
                     child: TextField(
-                      obscureText: true,  // 비밀번호 입력 시 숨김 처리
+                      controller: _passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
-                        hintText: 'Enter Password', // 힌트 텍스트 추가
+                        hintText: 'Enter Password',
                         border: InputBorder.none,
                       ),
                     ),
@@ -125,23 +161,14 @@ class AdminLoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            // 로그인 버튼
             Positioned(
-              top: screenHeight * 0.75, // 로그인 버튼의 상단 위치
-              left: MediaQuery.of(context).size.width * 0.5 - 150 / 2, // 버튼 너비 150을 기준으로 중앙 정렬
+              top: screenHeight * 0.75,
+              left: screenWidth * 0.5 - 150 / 2,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FlightEditScreen()),
-                  );
-                },
+                onTap: _signIn,
                 child: Container(
                   width: 150,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   decoration: ShapeDecoration(
                     color: Color(0xFF7EC4E3),
                     shape: RoundedRectangleBorder(
