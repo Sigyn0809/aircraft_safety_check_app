@@ -6,14 +6,17 @@
 
 ## 관리자 접근 방법
 
-1. 앱 실행 후 로그인 화면에서 "관리자 로그인" 선택  
-2. 로그인 성공 시 관리자 전용 페이지로 이동
+1. 앱 실행 후 로그인 화면에서 "관리자 로그인" 선택  \
+2. 로그인 화면에서 등록된 관리자 ID / 비밀번호 입력
+3. 로그인 성공 시 관리자 전용 페이지로 이동
+
+> 관리자 인증은 AWS Cognito 기반으로 구현되어 있으며, 로그인 시 발급된 ID Token을 이용해 `/admin` 경로의 API 호출이 인증됩니다.
 
 ---
 
 ## Flight Number 조회
 
-- Flight Number 입력 후 [조회] 버튼 클릭  
+- Flight Number 입력 후 [Search] 버튼 클릭  
 - 해당 번호가 존재할 경우: 입력 필드에 기존 값 표시  
 - 존재하지 않을 경우: 모든 필드 비워짐, 새 입력 가능 상태로 전환
 
@@ -23,18 +26,22 @@
 
 ### 등록하기
 
-- 조회한 Flight Number가 없을 경우 → 필드를 입력하고 [등록하기] 클릭  
+- 조회한 Flight Number가 없을 경우 → 필드를 입력하고 [Register] 클릭
+- `POST /admin` 요청 발생 → DynamoDB에 항공편 정보 등록
 - 필수 항목:  
-  - Engine Temperature  
-  - Vibration  
-  - Altitude Error  
-  - Oil Pressure  
+  - hydraulic_pressure_A  
+  - hydraulic_pressure_B  
+  - hydraulic_fluid_temp  
+  - brake_wear_level
+  - fan_blade_wear_score
+  - route (예: ICN-LAX)
 - 모든 항목이 유효하게 입력되어야 등록 가능  
 - 성공 시 "업로드 성공!" 메시지가 스낵바로 표시됨
 
 ### 수정하기
 
-- 기존 Flight Number를 조회한 경우 → 데이터 수정 후 [수정하기] 클릭  
+- 기존 Flight Number를 조회한 경우 → 데이터 수정 후 [Update] 클릭
+- `PUT /admin` 요청 발생 → 해당 항공편 정보 갱신
 - 성공 시 동일하게 스낵바 알림 표시됨
 
 ---
@@ -51,9 +58,9 @@
 
 ## 주요 화면 흐름
 
-1. Flight Number 입력 → 조회 버튼 클릭  
+1. Flight Number 입력 → [Search] 버튼 클릭  
 2. 존재 시: 기존 값 표시 / 미존재 시: 빈 입력 필드 제공  
-3. 값 입력 후 등록 또는 수정 버튼 클릭  
+3. 값 입력 후 [Register] 또는 [Update] 버튼 클릭  
 4. 결과 메시지 스낵바로 안내 표시
 
 ---
