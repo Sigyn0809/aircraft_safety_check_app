@@ -24,13 +24,13 @@ class LoginScreen extends StatelessWidget {
                 height: screenHeight * 0.6, // 화면의 60% 차지
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://picsum.photos/800/600"), // 배경 이미지 URL
+                    image: AssetImage("assets/images/login_bg.png"), // 배경 이미지
                     fit: BoxFit.cover, // 이미지를 비율에 맞게 꽉 채우기
                   ),
                 ),
                 child: Stack(
                   children: [
-                    // 'Aircraft Safety Check' 텍스트 추가 (이미지 위에 배치)
+                    // 'Login' 텍스트 추가 (이미지 위에 배치)
                     Positioned(
                       top: screenHeight * 0.043, // 세로 위치 지정
                       left: 0, // left를 0으로 설정하여, Align 위젯이 자동으로 중앙 정렬되도록 함
@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.center, // 수평 중앙 정렬
                         child: Text(
-                          'Aircraft Safety Check',
+                          'Login',
                           style: TextStyle(
                             color: Colors.black, // 검정색 텍스트
                             fontSize: 20,
